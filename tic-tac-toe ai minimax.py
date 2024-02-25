@@ -81,7 +81,7 @@ class GamePainter:
             for column in range(3):
                 x = row * self.field_size
                 y = column * self.field_size
-                pygame.draw.rect(screen, (0, 0, 0), (x, y, self.field_size, self.field_size), self.grid_thickness)    
+                pygame.draw.rect(screen, (0, 0, 0), (x, y, self.field_size, self.field_size), self.grid_thickness) 
         
     def draw_game_state(self, screen, game_state):
         self.draw_grid(screen)
@@ -244,6 +244,6 @@ while run:
     
     painter.draw_game_state(screen, game.get_state())
     
-    pygame.display.flip()
+    pygame.display.update()
 
 pygame.display.quit()

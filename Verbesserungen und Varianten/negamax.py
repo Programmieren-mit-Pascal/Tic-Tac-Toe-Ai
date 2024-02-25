@@ -223,6 +223,6 @@ while run:
     
     painter.draw_game_state(screen, game.get_state())
     
-    pygame.display.flip()
+    pygame.display.update()
 
 pygame.display.quit()
