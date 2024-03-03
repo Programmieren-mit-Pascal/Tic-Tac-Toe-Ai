@@ -162,7 +162,9 @@ def minimax(game, alpha, beta, depth):
         
 
 WIN_SIZE = 600
+
 screen = pygame.display.set_mode((WIN_SIZE, WIN_SIZE))
+pygame.display.set_caption("Tic-Tac-Toe")
 
 FPS = 30
 clock = pygame.time.Clock()
