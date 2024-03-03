@@ -161,11 +161,16 @@ def minimax(game, alpha, beta, depth):
     return max_value
         
 
-WIN_SIZE = 801
+WIN_SIZE = 600
 screen = pygame.display.set_mode((WIN_SIZE, WIN_SIZE))
+
+FPS = 30
+clock = pygame.time.Clock()
 
 painter = GamePainter(WIN_SIZE)
 game = Game(False)
+
+game_over = False
 
 if not game.is_players_turn():
     # Draw the board so that the window is not black while the computer is thinking.
@@ -175,11 +180,6 @@ if not game.is_players_turn():
     
     # Make the first computer move.
     make_computer_move(game)
-
-FPS = 30
-clock = pygame.time.Clock()
-
-game_over = False
 
 run = True
 while run:
