@@ -30,7 +30,7 @@ class Game:
     def is_move_legal(self, row, column):
         return self.state[row][column] == 0
     
-    def get_legal_moves(self):
+    def find_legal_moves(self):
         legal_moves = []
         for row in range(3):
             for column in range(3):
@@ -55,15 +55,6 @@ class Game:
         
     def board_full(self):
         return self.move_count == 9
-    
-    def get_state(self):
-        return self.state
-    
-    def is_players_turn(self):
-        return self.players_turn
-    
-    def get_move_count(self):
-        return self.move_count
     
         
 class GamePainter:
@@ -139,13 +130,13 @@ def minimax(game, depth):
         searched_leaf_nodes += 1
         # Current player lost because the other player made the last move.
         # Add move count to the evaluation because late losses are better than early losses.
-        return -100 + game.get_move_count()
+        return -100 + game.move_count
     if game.board_full():
         searched_leaf_nodes += 1
         # Board is filled but no player won: Draw.
         return 0
     max_value = -float("inf")
-    legal_moves = game.get_legal_moves()
+    legal_moves = game.find_legal_moves()
     for move_row, move_column in legal_moves:
         game.make_move(move_row, move_column)
         value = -minimax(game, depth+1)
@@ -170,10 +161,10 @@ game = Game(False)
 
 game_over = False
 
-if not game.is_players_turn():
+if not game.players_turn:
     # Draw the board so that the window is not black while the computer is thinking.
     screen.fill((255, 255, 255))  
-    painter.draw_game_state(screen, game.get_state())
+    painter.draw_game_state(screen, game.state)
     pygame.display.flip()
     
     # Make the first computer move.
@@ -223,7 +214,7 @@ while run:
     
     screen.fill((255, 255, 255))
     
-    painter.draw_game_state(screen, game.get_state())
+    painter.draw_game_state(screen, game.state)
     
     pygame.display.update()
 
