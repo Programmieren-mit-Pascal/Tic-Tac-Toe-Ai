@@ -60,20 +60,20 @@ class Game:
 class GamePainter:
     
     def __init__(self, win_size):
-        self.FIELD_SIZE = win_size // 3
+        self.SQUARE_SIZE = win_size // 3
         self.GRID_THICKNESS = win_size // 100
         self.CIRCLE_THICKNESS = win_size // 35
-        self.CIRCLE_RADIUS = self.FIELD_SIZE // 2.4
+        self.CIRCLE_RADIUS = self.SQUARE_SIZE // 2.4
         self.CROSS_THICKNESS = win_size // 27
-        self.CROSS_SIZE = self.FIELD_SIZE // 3
+        self.CROSS_SIZE = self.SQUARE_SIZE // 3
         
     def draw_grid(self, screen):
         for row in range(3):
             for column in range(3):
-                x = row * self.FIELD_SIZE
-                y = column * self.FIELD_SIZE
+                x = row * self.SQUARE_SIZE
+                y = column * self.SQUARE_SIZE
                 pygame.draw.rect(screen, (0, 0, 0), 
-                                 (x, y, self.FIELD_SIZE, self.FIELD_SIZE), self.GRID_THICKNESS) 
+                                 (x, y, self.SQUARE_SIZE, self.SQUARE_SIZE), self.GRID_THICKNESS) 
         
     def draw_game_state(self, screen, game_state):
         self.draw_grid(screen)
@@ -86,27 +86,27 @@ class GamePainter:
                     self.draw_cross(screen, row, column)
     
     def draw_circle(self, screen, row, column):
-        x, y = self.get_field_center_pos(row, column)
+        x, y = self.get_square_center_pos(row, column)
         pygame.draw.circle(screen, (0, 0, 255), (x, y), self.CIRCLE_RADIUS, self.CIRCLE_THICKNESS)
         
     def draw_cross(self, screen, row, column):
-        x, y = self.get_field_center_pos(row, column)
+        x, y = self.get_square_center_pos(row, column)
         left_x = x - self.CROSS_SIZE
         right_x = x + self.CROSS_SIZE
         top_y = y - self.CROSS_SIZE
         bottom_y = y + self.CROSS_SIZE
         pygame.draw.line(screen, (255, 0, 0), (left_x, top_y), (right_x, bottom_y), self.CROSS_THICKNESS)
-        pygame.draw.line(screen, (255, 0, 0), (left_x, bottom_y), (right_x, top_y), self.CROSS_THICKNESS)
+        pygame.draw.line(screen, (255, 0, 0), (right_x, top_y), (left_x, bottom_y), self.CROSS_THICKNESS)
     
-    def get_field_center_pos(self, row, column):
-        x = column * self.FIELD_SIZE + self.FIELD_SIZE // 2
-        y = row * self.FIELD_SIZE + self.FIELD_SIZE // 2
+    def get_square_center_pos(self, row, column):
+        x = column * self.SQUARE_SIZE + self.SQUARE_SIZE // 2
+        y = row * self.SQUARE_SIZE + self.SQUARE_SIZE // 2
         return (x, y)
     
     def mouse_to_grid_pos(self, mouse_x, mouse_y):
-        row = mouse_y // self.FIELD_SIZE
+        row = mouse_y // self.SQUARE_SIZE
         row = min(row, 2)
-        column = mouse_x // self.FIELD_SIZE
+        column = mouse_x // self.SQUARE_SIZE
         column = min(column, 2)
         return (row, column)
 
