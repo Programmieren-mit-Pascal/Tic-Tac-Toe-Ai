@@ -53,6 +53,8 @@ class Game:
         if self.state[0][2] == self.state[1][1] == self.state[2][0] != 0:
             return True
         
+        return False
+        
     def board_full(self):
         return self.move_count == 9
     
@@ -75,7 +77,6 @@ class GamePainter:
                 pygame.draw.rect(screen, (0, 0, 0), (x, y, self.SQUARE_SIZE, self.SQUARE_SIZE), self.GRID_THICKNESS) 
         
     def draw_game_state(self, screen, game_state):
-        self.draw_grid(screen)
         for row in range(3):
             for column in range(3):
                 piece = game_state[row][column]
@@ -169,6 +170,7 @@ if not game.players_turn:
     # Draw the board so that the window is not black while the computer is thinking.
     screen.fill((255, 255, 255))  
     painter.draw_game_state(screen, game.state)
+    painter.draw_grid(screen)
     pygame.display.flip()
     
     # Make the first computer move.
@@ -219,6 +221,7 @@ while run:
     screen.fill((255, 255, 255))
     
     painter.draw_game_state(screen, game.state)
+    painter.draw_grid(screen)
     
     pygame.display.update()
 
