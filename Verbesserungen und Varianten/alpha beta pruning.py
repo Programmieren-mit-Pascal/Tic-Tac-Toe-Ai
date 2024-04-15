@@ -12,18 +12,15 @@ class Game:
                       [0, 0, 0]]
         self.players_turn = players_turn
         self.move_count = 0
-        self.move_history = []
         
     def make_move(self, row, column):
         piece = Game.CIRCLE if self.players_turn else Game.CROSS
         self.state[row][column] = piece
-        self.move_history.append((row, column))
         self.players_turn = not self.players_turn
         self.move_count += 1
         
-    def undo_move(self):
-        last_row, last_column = self.move_history.pop()
-        self.state[last_row][last_column] = 0
+    def undo_move(self, row, column):
+        self.state[row][column] = 0
         self.players_turn = not self.players_turn
         self.move_count -= 1
     
@@ -141,7 +138,7 @@ def maximize(game, alpha, beta, depth):
     for move_row, move_column in legal_moves:
         game.make_move(move_row, move_column)
         value = minimize(game, alpha, beta, depth+1)
-        game.undo_move()
+        game.undo_move(move_row, move_column)
         if value > max_value:
             max_value = value
             if depth == 0:
@@ -168,7 +165,7 @@ def minimize(game, alpha, beta, depth):
     for move_row, move_column in legal_moves:
         game.make_move(move_row, move_column)
         value = maximize(game, alpha, beta, depth+1)
-        game.undo_move()
+        game.undo_move(move_row, move_column)
         if value < min_value:
             min_value = value
         if value < beta:
