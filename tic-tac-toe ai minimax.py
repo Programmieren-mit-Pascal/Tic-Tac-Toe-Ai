@@ -86,7 +86,7 @@ class GamePainter:
     def draw_circle(self, screen, row, column):
         x, y = self.get_square_center_pos(row, column)
         pygame.draw.circle(screen, (0, 0, 255), (x, y), self.CIRCLE_RADIUS, self.CIRCLE_THICKNESS)
-    
+        
     def draw_cross(self, screen, row, column):
         x, y = self.get_square_center_pos(row, column)
         left_x = x - self.CROSS_SIZE
@@ -95,12 +95,12 @@ class GamePainter:
         bottom_y = y + self.CROSS_SIZE
         pygame.draw.line(screen, (255, 0, 0), (left_x, top_y), (right_x, bottom_y), self.CROSS_THICKNESS)
         pygame.draw.line(screen, (255, 0, 0), (right_x, top_y), (left_x, bottom_y), self.CROSS_THICKNESS)
-    
+        
     def get_square_center_pos(self, row, column):
         x = column * self.SQUARE_SIZE + self.SQUARE_SIZE // 2
         y = row * self.SQUARE_SIZE + self.SQUARE_SIZE // 2
         return (x, y)
-    
+        
     def mouse_to_grid_pos(self, mouse_x, mouse_y):
         row = mouse_y // self.SQUARE_SIZE
         row = min(row, 2)
@@ -108,7 +108,7 @@ class GamePainter:
         column = min(column, 2)
         return (row, column)
 
-    
+
 def make_computer_move(game):
     global best_move, searched_leaf_nodes
     best_move = None
