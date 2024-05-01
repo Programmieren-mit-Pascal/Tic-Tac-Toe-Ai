@@ -2,10 +2,10 @@ import pygame
 pygame.init()
 
 class Game:
-
+    
     CIRCLE = 1
     CROSS = 2
-        
+    
     def __init__(self, players_turn):
         self.state = [[0, 0, 0],
                       [0, 0, 0],
@@ -23,18 +23,7 @@ class Game:
         self.state[row][column] = 0
         self.players_turn = not self.players_turn
         self.move_count -= 1
-    
-    def is_move_legal(self, row, column):
-        return self.state[row][column] == 0
-    
-    def find_legal_moves(self):
-        legal_moves = []
-        for row in range(3):
-            for column in range(3):
-                if self.is_move_legal(row, column):
-                    legal_moves.append((row, column))
-        return legal_moves
-    
+        
     def did_someone_win(self):
         for i in range(3):
             # Horizontal
@@ -52,10 +41,21 @@ class Game:
         
         return False
         
+    def is_move_legal(self, row, column):
+        return self.state[row][column] == 0
+    
+    def find_legal_moves(self):
+        legal_moves = []
+        for row in range(3):
+            for column in range(3):
+                if self.is_move_legal(row, column):
+                    legal_moves.append((row, column))
+        return legal_moves
+                
     def board_full(self):
         return self.move_count == 9
-    
-        
+
+
 class GamePainter:
     
     def __init__(self, win_size):
@@ -69,11 +69,11 @@ class GamePainter:
     def draw_grid(self, screen):
         for row in range(3):
             for column in range(3):
-                x = row * self.SQUARE_SIZE
-                y = column * self.SQUARE_SIZE
+                x = column * self.SQUARE_SIZE
+                y = row * self.SQUARE_SIZE
                 pygame.draw.rect(screen, (0, 0, 0), 
-                                 (x, y, self.SQUARE_SIZE, self.SQUARE_SIZE), self.GRID_THICKNESS) 
-        
+                                 (x, y, self.SQUARE_SIZE, self.SQUARE_SIZE), self.GRID_THICKNESS)
+                
     def draw_game_state(self, screen, game_state):
         for row in range(3):
             for column in range(3):
@@ -82,11 +82,11 @@ class GamePainter:
                     self.draw_circle(screen, row, column)
                 elif piece == Game.CROSS:
                     self.draw_cross(screen, row, column)
-    
+                    
     def draw_circle(self, screen, row, column):
         x, y = self.get_square_center_pos(row, column)
         pygame.draw.circle(screen, (0, 0, 255), (x, y), self.CIRCLE_RADIUS, self.CIRCLE_THICKNESS)
-        
+    
     def draw_cross(self, screen, row, column):
         x, y = self.get_square_center_pos(row, column)
         left_x = x - self.CROSS_SIZE
@@ -108,20 +108,19 @@ class GamePainter:
         column = min(column, 2)
         return (row, column)
 
-
+    
 def make_computer_move(game):
     global best_move, searched_leaf_nodes
     best_move = None
     searched_leaf_nodes = 0
     evaluation = maximize(game, 0)
-    best_move_row, best_move_column = best_move
-    game.make_move(best_move_row, best_move_column)
+    best_row, best_column = best_move
+    game.make_move(best_row, best_column)
     print("Evaluation: ", evaluation)
     print("Searched leaf nodes: ", searched_leaf_nodes)
     print()
-    # Intercept inputs that happend while the computer was thinking.
+    # Intercept inputs that happened while the computer was thinking.
     pygame.event.get()
-
 
 def maximize(game, depth):
     global best_move, searched_leaf_nodes
@@ -166,9 +165,9 @@ def minimize(game, depth):
         if value < min_value:
             min_value = value
     return min_value
-        
 
-WIN_SIZE = 600
+
+WIN_SIZE = 800
 
 screen = pygame.display.set_mode((WIN_SIZE, WIN_SIZE))
 pygame.display.set_caption("Tic-Tac-Toe")
@@ -183,17 +182,16 @@ game_over = False
 
 if not game.players_turn:
     # Draw the board so that the window is not black while the computer is thinking.
-    screen.fill((255, 255, 255))  
+    screen.fill((255, 255, 255))
     painter.draw_game_state(screen, game.state)
     painter.draw_grid(screen)
-    pygame.display.flip()
+    pygame.display.update()
     
-    # Make the first computer move.
+    # Make the first computer move
     make_computer_move(game)
 
 run = True
 while run:
-    
     clock.tick(FPS)
     
     for event in pygame.event.get():
@@ -214,8 +212,8 @@ while run:
             game.make_move(row, column)
             
             if game.did_someone_win():
-                game_over = True
                 print("Player won!")
+                game_over = True
                 continue
             if game.board_full():
                 game_over = True
@@ -225,19 +223,19 @@ while run:
             make_computer_move(game)
             
             if game.did_someone_win():
-                game_over = True
                 print("Computer won!")
+                game_over = True
                 continue
             if game.board_full():
                 game_over = True
                 print("Draw!")
                 continue
-    
+            
     screen.fill((255, 255, 255))
     
     painter.draw_game_state(screen, game.state)
     painter.draw_grid(screen)
     
     pygame.display.update()
-
+    
 pygame.display.quit()
