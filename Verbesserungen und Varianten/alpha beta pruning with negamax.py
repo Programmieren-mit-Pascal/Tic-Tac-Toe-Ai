@@ -150,7 +150,7 @@ def minimax(game, alpha, beta, depth):
     return max_value
 
 
-WIN_SIZE = 800
+WIN_SIZE = 600
 
 screen = pygame.display.set_mode((WIN_SIZE, WIN_SIZE))
 pygame.display.set_caption("Tic-Tac-Toe")
